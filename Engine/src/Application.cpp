@@ -108,38 +108,38 @@ bool Application::InitVulkan()
 	}
 
 	//Logger::log(1, "%s: Found %u Vulkan extensions\n", __FUNCTION__, extensionCount);
-	for (int i = 0; i < extensionCount; ++i)
+	for (uint32_t i = 0; i < extensionCount; ++i)
 	{
 		LOG_INFO("{0} : {1}", __FUNCTION__, std::string(extensions[i]).c_str());
 	}
 
-	VkInstanceCreateInfo mCreateInfo{};
-	mCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	mCreateInfo.pNext = nullptr;
-	mCreateInfo.pApplicationInfo = &mAppInfo;
-	mCreateInfo.enabledExtensionCount = extensionCount;
-	mCreateInfo.ppEnabledExtensionNames = extensions;
-	mCreateInfo.enabledLayerCount = 0;
+	VkInstanceCreateInfo CreateInfo{};
+	CreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+	CreateInfo.pNext = nullptr;
+	CreateInfo.pApplicationInfo = &mAppInfo;
+	CreateInfo.enabledExtensionCount = extensionCount;
+	CreateInfo.ppEnabledExtensionNames = extensions;
+	CreateInfo.enabledLayerCount = 0;
 
-	result = vkCreateInstance(&mCreateInfo, nullptr, &mInstance);
+	result = vkCreateInstance(&CreateInfo, nullptr, &mInstance);
 	if (result != VK_SUCCESS)
 	{
 		LOG_ERROR("Could not create Vulkan instance");
 		return false;
 	}
 
-	uint32_t physicalDeviceCount = 0;
-	vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, nullptr);
+	uint32_t PhysicalDeviceCount = 0;
+	vkEnumeratePhysicalDevices(mInstance, &PhysicalDeviceCount, nullptr);
 
-	if (physicalDeviceCount == 0)
+	if (PhysicalDeviceCount == 0)
 	{
 		LOG_ERROR("No Vulkan capable GPU found");
 		return false;
 	}
 
-	std::vector<VkPhysicalDevice> devices;
-	devices.resize(physicalDeviceCount);
-	vkEnumeratePhysicalDevices(mInstance, &physicalDeviceCount, devices.data());
+	std::vector<VkPhysicalDevice> Devices;
+	Devices.resize(PhysicalDeviceCount);
+	vkEnumeratePhysicalDevices(mInstance, &PhysicalDeviceCount, Devices.data());
 
 	//Logger::log(1, "%s: Found %u physical device(s)\n", __FUNCTION__, physicalDeviceCount);
 
