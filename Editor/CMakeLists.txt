@@ -1,20 +1,26 @@
 
 project(Editor)
 
-file(GLOB_RECURSE EDITOR_APP_SRC CONFIGURE_DEPENDS src/*.cpp src/*.h)
+file(GLOB_RECURSE EDITOR_SRC CONFIGURE_DEPENDS src/*.cpp src/*.h)
 
-add_executable(Editor ${EDITOR_APP_SRC})
+add_executable(Editor ${EDITOR_SRC})
 
 target_include_directories(Editor PUBLIC
     src
     ../Engine/src
     ../ThirdParty/imgui
+    ../ThirdParty/imgui/backends
+    ../ThirdParty/glfw/include
     ../ThirdParty/glm
-    ../ThirdParty/GLFW/include
     ${VULKAN_SDK_INCLUDE}
 )
 
-target_link_libraries(Editor Engine)
+target_link_libraries(Editor
+    Engine
+    imgui
+    glfw
+    glm
+)
 
 target_compile_definitions(Editor PRIVATE WL_PLATFORM_WINDOWS)
 
