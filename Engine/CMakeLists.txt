@@ -12,6 +12,7 @@ target_include_directories(Engine PUBLIC
     ../ThirdParty/glfw/include
     ../ThirdParty/stb_image
     ../ThirdParty/glm
+    ../ThirdParty/spdlog
     ${VULKAN_SDK_INCLUDE}
 )
 
