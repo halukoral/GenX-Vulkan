@@ -1,6 +1,36 @@
-#include <iostream>
+#include "Application.h"
+#include "EntryPoint.h"
 
-int main() 
+class EditorLayer : public Layer
 {
-    return 0;
+public:
+    void OnUIRender() override
+    {
+        ImGui::Begin("Hello");
+        ImGui::Button("Button");
+        ImGui::End();
+
+        ImGui::ShowDemoWindow();
+    }
+};
+
+Application* CreateApplication(int argc, char** argv)
+{
+    AppSpec spec;
+    spec.Name = "Editor";
+
+    auto app = new Application(spec);
+    app->PushLayer<EditorLayer>();
+    app->SetMenubarCallback([app]()
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Exit"))
+            {
+                app->Close();
+            }
+            ImGui::EndMenu();
+        }
+    });
+    return app;
 }
