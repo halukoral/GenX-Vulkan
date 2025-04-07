@@ -1,5 +1,6 @@
 
 project(Editor)
+add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 file(GLOB_RECURSE EDITOR_SRC CONFIGURE_DEPENDS src/*.cpp src/*.h)
 

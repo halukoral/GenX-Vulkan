@@ -19,7 +19,7 @@ class Application
 {
 public:
 	Application(AppSpec spec = AppSpec());
-	~Application() = default;
+	~Application();
 
 	static Application& Get();
 
