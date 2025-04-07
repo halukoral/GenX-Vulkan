@@ -16,7 +16,7 @@ void check_vk_result(VkResult err)
 	if (err == 0)
 		return;
 
-	LOG_CORE_ERROR("[vulkan] Error: VkResult = {0}", err);
+	LOG_ERROR("[vulkan] Error: VkResult = {0}", err);
 
 	if (err < 0)
 		abort();
@@ -24,7 +24,7 @@ void check_vk_result(VkResult err)
 
 static void glfw_error_callback(int error, const char* description)
 {
-	LOG_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
+	LOG_ERROR("GLFW Error ({0}): {1}", error, description);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,14 +53,14 @@ void Application::Init()
 	glfwSetErrorCallback(glfw_error_callback);
 	if (!glfwInit())
 	{
-		LOG_CORE_ERROR("Could not initialize GLFW!");
+		LOG_ERROR("Could not initialize GLFW!");
 		return;
 	}
 
 	// Setup Vulkan
 	if (!glfwVulkanSupported())
 	{
-		LOG_CORE_ERROR("GLFW: Vulkan not supported!");
+		LOG_ERROR("GLFW: Vulkan not supported!");
 		return;
 	}
 	
@@ -72,14 +72,14 @@ void Application::Init()
 
 	if (!m_WindowHandle)
 	{
-		LOG_CORE_ERROR("Could not create window!");
+		LOG_ERROR("Could not create window!");
 		glfwTerminate();
 		return;
 	}
 
 	if (!InitVulkan())
 	{
-		LOG_CORE_ERROR("Could not init Vulkan!");
+		LOG_ERROR("Could not init Vulkan!");
 		glfwTerminate();
 		return;
 	}
@@ -103,14 +103,14 @@ bool Application::InitVulkan()
 
 	if (extensionCount == 0)
 	{
-		LOG_CORE_ERROR("No Vulkan extensions found, need at least 'VK_KHR_surface'");
+		LOG_ERROR("No Vulkan extensions found, need at least 'VK_KHR_surface'");
 		return false;
 	}
 
 	//Logger::log(1, "%s: Found %u Vulkan extensions\n", __FUNCTION__, extensionCount);
 	for (int i = 0; i < extensionCount; ++i)
 	{
-		LOG_CORE_INFO("{0} : {1}", __FUNCTION__, std::string(extensions[i]).c_str());
+		LOG_INFO("{0} : {1}", __FUNCTION__, std::string(extensions[i]).c_str());
 	}
 
 	VkInstanceCreateInfo mCreateInfo{};
@@ -124,7 +124,7 @@ bool Application::InitVulkan()
 	result = vkCreateInstance(&mCreateInfo, nullptr, &mInstance);
 	if (result != VK_SUCCESS)
 	{
-		LOG_CORE_ERROR("Could not create Vulkan instance");
+		LOG_ERROR("Could not create Vulkan instance");
 		return false;
 	}
 
@@ -133,7 +133,7 @@ bool Application::InitVulkan()
 
 	if (physicalDeviceCount == 0)
 	{
-		LOG_CORE_ERROR("No Vulkan capable GPU found");
+		LOG_ERROR("No Vulkan capable GPU found");
 		return false;
 	}
 
@@ -146,7 +146,7 @@ bool Application::InitVulkan()
 	result = glfwCreateWindowSurface(mInstance, m_WindowHandle, nullptr, &mSurface);
 	if (result != VK_SUCCESS)
 	{
-		LOG_CORE_ERROR("Could not create Vulkan surface");
+		LOG_ERROR("Could not create Vulkan surface");
 		return false;
 	}
 

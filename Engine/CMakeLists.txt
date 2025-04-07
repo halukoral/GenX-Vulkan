@@ -13,7 +13,6 @@
         ../ThirdParty/glfw/include
         ../ThirdParty/stb_image
         ../ThirdParty/glm
-        ../ThirdParty/spdlog/include
         ${VULKAN_SDK_INCLUDE}
     )
     
