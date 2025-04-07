@@ -1,10 +1,12 @@
 #include "Application.h"
+#include "Log.h"
 
 #define GLFW_INCLUDE_VULKAN
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_vulkan.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+
 
 extern bool g_ApplicationRunning;
 static Application* s_Instance = nullptr;
@@ -14,7 +16,7 @@ void check_vk_result(VkResult err)
 	if (err == 0)
 		return;
 
-	fprintf(stderr, "[vulkan] Error: VkResult = %d\n", err);
+	LOG_CORE_ERROR("[vulkan] Error: VkResult = {0}", err);
 
 	if (err < 0)
 		abort();
@@ -22,7 +24,7 @@ void check_vk_result(VkResult err)
 
 static void glfw_error_callback(int error, const char* description)
 {
-	fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+	LOG_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,14 +53,14 @@ void Application::Init()
 	glfwSetErrorCallback(glfw_error_callback);
 	if (!glfwInit())
 	{
-		std::cerr << "Could not initialize GLFW!\n";
+		LOG_CORE_ERROR("Could not initialize GLFW!");
 		return;
 	}
 
 	// Setup Vulkan
 	if (!glfwVulkanSupported())
 	{
-		std::cerr << "GLFW: Vulkan not supported!\n";
+		LOG_CORE_ERROR("GLFW: Vulkan not supported!");
 		return;
 	}
 	
@@ -70,14 +72,14 @@ void Application::Init()
 
 	if (!m_WindowHandle)
 	{
-		std::cerr << "Could not create window!\n";
+		LOG_CORE_ERROR("Could not create window!");
 		glfwTerminate();
 		return;
 	}
 
 	if (!InitVulkan())
 	{
-		std::cerr << "Could not init Vulkan!\n";
+		LOG_CORE_ERROR("Could not init Vulkan!");
 		glfwTerminate();
 		return;
 	}
@@ -101,14 +103,14 @@ bool Application::InitVulkan()
 
 	if (extensionCount == 0)
 	{
-		std::cerr << "No Vulkan extensions found, need at least 'VK_KHR_surface'\n";
+		LOG_CORE_ERROR("No Vulkan extensions found, need at least 'VK_KHR_surface'");
 		return false;
 	}
 
 	//Logger::log(1, "%s: Found %u Vulkan extensions\n", __FUNCTION__, extensionCount);
 	for (int i = 0; i < extensionCount; ++i)
 	{
-		//Logger::log(1, "%s: %s\n", __FUNCTION__, std::string(extensions[i]).c_str());
+		LOG_CORE_INFO("{0} : {1}", __FUNCTION__, std::string(extensions[i]).c_str());
 	}
 
 	VkInstanceCreateInfo mCreateInfo{};
@@ -122,7 +124,7 @@ bool Application::InitVulkan()
 	result = vkCreateInstance(&mCreateInfo, nullptr, &mInstance);
 	if (result != VK_SUCCESS)
 	{
-		std::cerr << "Could not create Vulkan instance\n";
+		LOG_CORE_ERROR("Could not create Vulkan instance");
 		return false;
 	}
 
@@ -131,7 +133,7 @@ bool Application::InitVulkan()
 
 	if (physicalDeviceCount == 0)
 	{
-		std::cerr << "No Vulkan capable GPU found\n";
+		LOG_CORE_ERROR("No Vulkan capable GPU found");
 		return false;
 	}
 
@@ -144,7 +146,7 @@ bool Application::InitVulkan()
 	result = glfwCreateWindowSurface(mInstance, m_WindowHandle, nullptr, &mSurface);
 	if (result != VK_SUCCESS)
 	{
-		std::cerr << "Could not create Vulkan surface\n";
+		LOG_CORE_ERROR("Could not create Vulkan surface");
 		return false;
 	}
 
