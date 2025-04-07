@@ -1,32 +1,22 @@
-# Prerequisites
-*.d
+#Directories
+.idea/
+.vs/
+bin/
+bin-int/
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+#Files
+*.user
+*.log
+GenixED/*.json
 
-# Precompiled Headers
-*.gch
-*.pch
+# Visual Studio files and folder
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+**.csproj
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# Directories
+Genix/ThirdParty/VulkanSDK
+GenixED/Assets/cache
+scripts/__pycache__
