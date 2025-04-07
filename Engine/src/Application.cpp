@@ -87,16 +87,14 @@ void Application::Init()
 
 bool Application::InitVulkan()
 {
-	VkResult result = VK_ERROR_UNKNOWN;
-
-	VkApplicationInfo mAppInfo{};
-	mAppInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	mAppInfo.pNext = nullptr;
-	mAppInfo.pApplicationName = m_Spec.Name.c_str();
-	mAppInfo.applicationVersion = VK_MAKE_API_VERSION(0, 0, 0, 1);
-	mAppInfo.pEngineName = "Game Animations Programming";
-	mAppInfo.engineVersion = VK_MAKE_API_VERSION(0, 1, 0, 0);
-	mAppInfo.apiVersion = VK_MAKE_API_VERSION(0, 1, 1, 0);
+	VkApplicationInfo AppInfo{};
+	AppInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+	AppInfo.pNext = nullptr;
+	AppInfo.pApplicationName = m_Spec.Name.c_str();
+	AppInfo.applicationVersion = VK_MAKE_API_VERSION(0, 0, 0, 1);
+	AppInfo.pEngineName = "Game Animations Programming";
+	AppInfo.engineVersion = VK_MAKE_API_VERSION(0, 1, 0, 0);
+	AppInfo.apiVersion = VK_MAKE_API_VERSION(0, 1, 1, 0);
 
 	uint32_t extensionCount = 0;
 	const char** extensions = glfwGetRequiredInstanceExtensions(&extensionCount);
@@ -116,13 +114,13 @@ bool Application::InitVulkan()
 	VkInstanceCreateInfo CreateInfo{};
 	CreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	CreateInfo.pNext = nullptr;
-	CreateInfo.pApplicationInfo = &mAppInfo;
+	CreateInfo.pApplicationInfo = &AppInfo;
 	CreateInfo.enabledExtensionCount = extensionCount;
 	CreateInfo.ppEnabledExtensionNames = extensions;
 	CreateInfo.enabledLayerCount = 0;
 
-	result = vkCreateInstance(&CreateInfo, nullptr, &mInstance);
-	if (result != VK_SUCCESS)
+	VkResult Result = vkCreateInstance(&CreateInfo, nullptr, &mInstance);
+	if (Result != VK_SUCCESS)
 	{
 		LOG_ERROR("Could not create Vulkan instance");
 		return false;
@@ -141,10 +139,10 @@ bool Application::InitVulkan()
 	Devices.resize(PhysicalDeviceCount);
 	vkEnumeratePhysicalDevices(mInstance, &PhysicalDeviceCount, Devices.data());
 
-	//Logger::log(1, "%s: Found %u physical device(s)\n", __FUNCTION__, physicalDeviceCount);
+	LOG_INFO("{0} : Found {1} physical device(s)", __FUNCTION__, PhysicalDeviceCount);
 
-	result = glfwCreateWindowSurface(mInstance, m_WindowHandle, nullptr, &mSurface);
-	if (result != VK_SUCCESS)
+	Result = glfwCreateWindowSurface(mInstance, m_WindowHandle, nullptr, &mSurface);
+	if (Result != VK_SUCCESS)
 	{
 		LOG_ERROR("Could not create Vulkan surface");
 		return false;
@@ -180,6 +178,13 @@ void Application::Run()
 
 		for (auto& layer : m_LayerStack)
 			layer->OnUpdate(m_TimeStep);
+
+		////////////////////////////////////
+		// Render
+
+
+
+		////////////////////////////////////
 
 		float time = GetTime();
 		m_FrameTime = time - m_LastFrameTime;
