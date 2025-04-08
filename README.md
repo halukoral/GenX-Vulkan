@@ -1,2 +1,2 @@
 # GenX
- A Vulkan Game Engine
+ A simple application framework designed to be used with Vulkan.
